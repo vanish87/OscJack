@@ -7,6 +7,11 @@ using System.Net.Sockets;
 
 namespace OscJack
 {
+    public interface ISendable
+    {
+        string Format();
+        string Data();
+    }
     public sealed class OscClient : IDisposable
     {
         #region Object life cycle
@@ -120,6 +125,24 @@ namespace OscJack
             foreach (var data in list) formatStr+="f";
             _encoder.Append(formatStr);
             foreach (var data in list) _encoder.Append(data);
+            _socket.Send(_encoder.Buffer, _encoder.Length, SocketFlags.None);
+        }
+        public void SendFloatList(string address, float[] list)
+        {
+            _encoder.Clear();
+            _encoder.Append(address);
+            var formatStr = ",";
+            foreach (var data in list) formatStr+="f";
+            _encoder.Append(formatStr);
+            foreach (var data in list) _encoder.Append(data);
+            _socket.Send(_encoder.Buffer, _encoder.Length, SocketFlags.None);
+        }
+        public void Send(string address, ISendable data)
+        {
+            _encoder.Clear();
+            _encoder.Append(address);
+            _encoder.Append("," + data.Format());
+            _encoder.Append(data.Data());
             _socket.Send(_encoder.Buffer, _encoder.Length, SocketFlags.None);
         }
 
