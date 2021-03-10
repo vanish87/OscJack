@@ -10,6 +10,7 @@ namespace OscJack
     // Data handle class that provides offset values to each data element
     // within a shared data buffer
     //
+    [Serializable]
     public sealed class OscDataHandle
     {
         #region Public methods
