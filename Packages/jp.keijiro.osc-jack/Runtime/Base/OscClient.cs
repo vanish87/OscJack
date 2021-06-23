@@ -36,6 +36,10 @@ namespace OscJack
         #endregion
 
         #region Packet sender methods
+        public void Send(OscPacketEncoder encoder)
+        {
+			_socket.Send(encoder.Buffer, encoder.Length, SocketFlags.None);
+        }
 
         public void Send(string address)
         {
